@@ -1,3 +1,4 @@
+import 'package:chat_app/homePage.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,11 +7,34 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // ignore: camel_case_types
-class login extends StatelessWidget {
+class login extends StatefulWidget {
+  @override
+  _loginState createState() => _loginState();
+}
+
+class _loginState extends State<login> {
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
-  Future<FirebaseUser> _signIn() async {
+  Future<FirebaseUser> getUser() async{
+    return await FirebaseAuth.instance.currentUser();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser().then((_firebaseUser){
+      if(_firebaseUser!=null){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+          return homePage();
+        }));
+      }
+    });
+  }
+
+  Future<FirebaseUser> _signIn(BuildContext context) async {
     GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -18,7 +42,7 @@ class login extends StatelessWidget {
       idToken: gSA.idToken,
     );
     final FirebaseUser firebaseUser =
-        await _auth.signInWithCredential(credential);
+    await _auth.signInWithCredential(credential);
     if (firebaseUser != null) {
       final QuerySnapshot result = await Firestore.instance
           .collection('users')
@@ -35,6 +59,9 @@ class login extends StatelessWidget {
           'id': firebaseUser.uid
         });
       }
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return homePage();
+      }));
     }
     print("User Name : ${firebaseUser.displayName}");
     return firebaseUser;
@@ -68,7 +95,7 @@ class login extends StatelessWidget {
               child: RaisedButton(
                 onPressed: () {
                   print("Button Clicked");
-                  _signIn()
+                  _signIn(context)
                       .then((FirebaseUser user) => print(user.displayName))
                       .catchError((e) => print(e));
                 },
