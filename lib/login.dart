@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // ignore: camel_case_types
@@ -12,6 +12,7 @@ class login extends StatefulWidget {
   _loginState createState() => _loginState();
 }
 
+// ignore: camel_case_types
 class _loginState extends State<login> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -32,6 +33,11 @@ class _loginState extends State<login> {
         }));
       }
     });
+  }
+
+  addStringToSF(String str) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('userid', str);
   }
 
   Future<FirebaseUser> _signIn(BuildContext context) async {
@@ -59,6 +65,10 @@ class _loginState extends State<login> {
           'id': firebaseUser.uid
         });
       }
+
+      String str=firebaseUser.uid;
+      addStringToSF(str);
+
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return homePage();
       }));
