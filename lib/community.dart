@@ -12,21 +12,18 @@ class community extends StatefulWidget {
 class _communityState extends State<community> {
   FirebaseUser firebaseUser;
   String userid;
+  int count = 0;
 
-  Future<FirebaseUser> getUser() async {
-    firebaseUser = await FirebaseAuth.instance
-        .currentUser()
-        .then((FirebaseUser firebaseUser) {
-      userid = firebaseUser.uid;
-      print("User id:$userid");
-    });
+  Future<String> getUid() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user.uid;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: StreamBuilder(
-        stream: Firestore.instance.collection('users').snapshots(),
+      child: FutureBuilder(
+        future: Firestore.instance.collection('users').getDocuments(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -38,7 +35,7 @@ class _communityState extends State<community> {
             return ListView.builder(
               padding: EdgeInsets.only(top: 10, bottom: 10),
               itemBuilder: (context, index) {
-                buildItem(context, snapshot.data.documents[index]);
+                return buildItem(context, snapshot.data.documents[index]);
               },
               itemCount: snapshot.data.documents.length,
             );
@@ -49,72 +46,32 @@ class _communityState extends State<community> {
   }
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
-    getUser();
-    print("User id is:$userid");
-    String id = document['id'].toString();
+    String id = document['nickname'].toString();
     print("Document id:$id");
-    if (id != userid) {
-      return Container(
-        child: FlatButton(
-          child: Row(
-            children: <Widget>[
-              Material(
-                child: CachedNetworkImage(
-                  placeholder: (context, url) => Container(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 1.0,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.indigo),
-                        ),
-                        width: 50.0,
-                        height: 50.0,
-                        padding: EdgeInsets.all(15.0),
-                      ),
-                  imageUrl: document['photoUrl'],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5,top: 5),
+      child: ListTile(
+        title: Text("$id"),
+        leading: Material(
+          child: CachedNetworkImage(
+            placeholder: (context, url) => Container(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1.0,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                  ),
                   width: 50.0,
                   height: 50.0,
-                  fit: BoxFit.cover,
+                  padding: EdgeInsets.all(15.0),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                clipBehavior: Clip.hardEdge,
-              ),
-              Flexible(
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          'Nickname: ${document['nickname']}',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
-                      ),
-                      Container(
-                        child: Text(
-                          'About me: ${document['aboutMe'] ?? 'Not available'}',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                      )
-                    ],
-                  ),
-                  margin: EdgeInsets.only(left: 20.0),
-                ),
-              ),
-            ],
+            imageUrl: document['photoUrl'],
+            width: 50.0,
+            height: 50.0,
+            fit: BoxFit.cover,
           ),
-          onPressed: () {},
-          color: Colors.grey,
-          padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          clipBehavior: Clip.hardEdge,
         ),
-        margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
-      );
-    } else {
-      return Container();
-    }
+      ),
+    );
   }
 }
