@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // ignore: camel_case_types
@@ -14,11 +13,10 @@ class login extends StatefulWidget {
 
 // ignore: camel_case_types
 class _loginState extends State<login> {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
-  Future<FirebaseUser> getUser() async{
+  Future<FirebaseUser> getUser() async {
     return await FirebaseAuth.instance.currentUser();
   }
 
@@ -26,9 +24,10 @@ class _loginState extends State<login> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser().then((_firebaseUser){
-      if(_firebaseUser!=null){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+    getUser().then((_firebaseUser) {
+      if (_firebaseUser != null) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
           return homePage();
         }));
       }
@@ -43,7 +42,7 @@ class _loginState extends State<login> {
       idToken: gSA.idToken,
     );
     final FirebaseUser firebaseUser =
-    await _auth.signInWithCredential(credential);
+        await _auth.signInWithCredential(credential);
     if (firebaseUser != null) {
       final QuerySnapshot result = await Firestore.instance
           .collection('users')
@@ -60,9 +59,6 @@ class _loginState extends State<login> {
           'id': firebaseUser.uid
         });
       }
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('userid', firebaseUser.uid);
 
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return homePage();

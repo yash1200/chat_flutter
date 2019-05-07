@@ -12,7 +12,6 @@ class community extends StatefulWidget {
 
 // ignore: camel_case_types
 class _communityState extends State<community> {
-
   FirebaseUser firebaseUser;
   String userid;
 
@@ -20,8 +19,8 @@ class _communityState extends State<community> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user){
-      userid=user.uid;
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      userid = user.uid;
     });
   }
 
@@ -58,10 +57,10 @@ class _communityState extends State<community> {
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
     String id = document['id'].toString();
-    String name=document['nickname'].toString();
+    String name = document['nickname'].toString();
     print("userid is:$userid");
     print("Document id:$id");
-    if(userid!=id){
+    if (userid != id) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 5, top: 5),
         child: ListTile(
@@ -69,14 +68,14 @@ class _communityState extends State<community> {
           leading: Material(
             child: CachedNetworkImage(
               placeholder: (context, url) => Container(
-                child: CircularProgressIndicator(
-                  strokeWidth: 1.0,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
-                ),
-                width: 50.0,
-                height: 50.0,
-                padding: EdgeInsets.all(15.0),
-              ),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1.0,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                    ),
+                    width: 50.0,
+                    height: 50.0,
+                    padding: EdgeInsets.all(15.0),
+                  ),
               imageUrl: document['photoUrl'],
               width: 50.0,
               height: 50.0,
@@ -91,8 +90,7 @@ class _communityState extends State<community> {
           ),
         ),
       );
-    }
-    else{
+    } else {
       return Container();
     }
   }

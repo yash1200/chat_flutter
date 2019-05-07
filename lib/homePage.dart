@@ -9,14 +9,15 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
-  int _cIndex=0;
+  int _cIndex = 0;
+
   void _incrementTab(index) {
     setState(() {
       _cIndex = index;
     });
   }
 
-  final widgets=[
+  final widgets = [
     chat(),
     community(),
     about(),
@@ -37,19 +38,27 @@ class _homePageState extends State<homePage> {
         type: BottomNavigationBarType.shifting,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.message,color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text('Chats',style: TextStyle(color: Colors.black),)
-          ),
+              icon: Icon(Icons.message, color: Color.fromARGB(255, 0, 0, 0)),
+              title: new Text(
+                'Chats',
+                style: TextStyle(color: Colors.black),
+              )),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance,color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text('Community',style: TextStyle(color: Colors.black),)
-          ),
+              icon: Icon(Icons.account_balance,
+                  color: Color.fromARGB(255, 0, 0, 0)),
+              title: new Text(
+                'Community',
+                style: TextStyle(color: Colors.black),
+              )),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_box,color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text('About Me',style: TextStyle(color: Colors.black),)
-          ),
+              icon:
+                  Icon(Icons.account_box, color: Color.fromARGB(255, 0, 0, 0)),
+              title: new Text(
+                'About Me',
+                style: TextStyle(color: Colors.black),
+              )),
         ],
-        onTap: (index){
+        onTap: (index) {
           _incrementTab(index);
         },
       ),
