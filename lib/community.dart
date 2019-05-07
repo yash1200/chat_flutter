@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 
 // ignore: camel_case_types
@@ -22,11 +21,6 @@ class _communityState extends State<community> {
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
       userid = user.uid;
     });
-  }
-
-  Future<String> getUid() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    return user.uid;
   }
 
   @override

@@ -20,7 +20,6 @@ class _homePageState extends State<homePage> {
   final widgets = [
     chat(),
     community(),
-    about(),
   ];
 
   @override
@@ -28,6 +27,9 @@ class _homePageState extends State<homePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Chat"),
+      ),
+      drawer: Drawer(
+        child: about(),
       ),
       body: Center(
         child: widgets.elementAt(_cIndex),
@@ -48,13 +50,6 @@ class _homePageState extends State<homePage> {
                   color: Color.fromARGB(255, 0, 0, 0)),
               title: new Text(
                 'Community',
-                style: TextStyle(color: Colors.black),
-              )),
-          BottomNavigationBarItem(
-              icon:
-                  Icon(Icons.account_box, color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text(
-                'About Me',
                 style: TextStyle(color: Colors.black),
               )),
         ],

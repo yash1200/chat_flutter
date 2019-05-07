@@ -10,11 +10,34 @@ class about extends StatefulWidget {
 
 // ignore: camel_case_types
 class _aboutState extends State<about> {
-  String url1;
+  FirebaseUser firebaseUser;
+  String name, email, url;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      name = user.displayName;
+      email = user.email;
+      url = user.photoUrl;
+    });
+    FutureBuilder(
+      future: getUser(),
+      builder: (context, snapshot) {
+        firebaseUser = snapshot.data;
+      },
+    );
+  }
 
   Future<String> getUid() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     return user.uid;
+  }
+
+  Future<FirebaseUser> getUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user;
   }
 
   getImageURL() async {
@@ -27,24 +50,36 @@ class _aboutState extends State<about> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    print("Name is:$name");
+    print("NNnname is:$firebaseUser.displayName");
+    return ListView(
       children: <Widget>[
-        FutureBuilder(
-          future: getImageURL(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
-                ),
-              );
-            } else {
-              return Container(
-                child: Image.network(snapshot.data),
-              );
-            }
-          },
-        ),
+        UserAccountsDrawerHeader(
+          accountName: Text("yash"),
+          accountEmail: Text("yash"),
+          currentAccountPicture: FutureBuilder(
+            future: getImageURL(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                );
+              } else {
+                return CircleAvatar(
+                  radius: 25,
+                  child: ClipOval(
+                      child: Image.network(
+                    snapshot.data,
+                    fit: BoxFit.fill,
+                  )),
+                );
+              }
+            },
+          ),
+        )
       ],
     );
   }
