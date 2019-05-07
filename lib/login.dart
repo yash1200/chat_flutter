@@ -35,11 +35,6 @@ class _loginState extends State<login> {
     });
   }
 
-  addStringToSF(String str) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('userid', str);
-  }
-
   Future<FirebaseUser> _signIn(BuildContext context) async {
     GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
@@ -66,8 +61,8 @@ class _loginState extends State<login> {
         });
       }
 
-      String str=firebaseUser.uid;
-      addStringToSF(str);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('userid', firebaseUser.uid);
 
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return homePage();

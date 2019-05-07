@@ -4,15 +4,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 
+// ignore: camel_case_types
 class community extends StatefulWidget {
   @override
   _communityState createState() => _communityState();
 }
 
+// ignore: camel_case_types
 class _communityState extends State<community> {
+
   FirebaseUser firebaseUser;
   String userid;
-  int count = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user){
+      userid=user.uid;
+    });
+  }
 
   Future<String> getUid() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -46,32 +57,43 @@ class _communityState extends State<community> {
   }
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
-    String id = document['nickname'].toString();
+    String id = document['id'].toString();
+    String name=document['nickname'].toString();
+    print("userid is:$userid");
     print("Document id:$id");
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5,top: 5),
-      child: ListTile(
-        title: Text("$id"),
-        leading: Material(
-          child: CachedNetworkImage(
-            placeholder: (context, url) => Container(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.0,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
-                  ),
-                  width: 50.0,
-                  height: 50.0,
-                  padding: EdgeInsets.all(15.0),
+    if(userid!=id){
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 5, top: 5),
+        child: ListTile(
+          title: Text("$name"),
+          leading: Material(
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Container(
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.0,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
                 ),
-            imageUrl: document['photoUrl'],
-            width: 50.0,
-            height: 50.0,
-            fit: BoxFit.cover,
+                width: 50.0,
+                height: 50.0,
+                padding: EdgeInsets.all(15.0),
+              ),
+              imageUrl: document['photoUrl'],
+              width: 50.0,
+              height: 50.0,
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+            clipBehavior: Clip.hardEdge,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-          clipBehavior: Clip.hardEdge,
+          trailing: Icon(
+            Icons.message,
+            color: Colors.indigo,
+          ),
         ),
-      ),
-    );
+      );
+    }
+    else{
+      return Container();
+    }
   }
 }

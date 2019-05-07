@@ -9,7 +9,6 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
-
   int _cIndex=0;
   void _incrementTab(index) {
     setState(() {
