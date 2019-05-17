@@ -34,38 +34,60 @@ class _chatUIState extends State<chatUI> {
       appBar: AppBar(
         title: Text(chatUserId),
       ),
-      body: Column(
-        children: <Widget>[buildListMessages(), typeMessage()],
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            buildListMessages(),
+            Divider(
+              height: 1,
+            ),
+            typeMessage()
+          ],
+        ),
       ),
     );
   }
 
   Widget buildListMessages() {
-    return Container();
+    return Flexible(
+      child: Container(),
+    );
   }
 
   Widget typeMessage() {
-    return Container(
-      alignment: Alignment.bottomCenter,
-      height: 50,
-      child: Row(
-        children: <Widget>[
-          Flexible(
-            child: TextField(
-              decoration: InputDecoration(
-                  hintText: 'Type a Message...',
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black))),
+    return Expanded(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
+          height: 70,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                        hintText: 'Type a Message...',
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black))),
+                  ),
+                ),
+                Material(
+                  child: Icon(
+                    Icons.send,
+                    size: 50,
+                    color: Colors.indigo,
+                  ),
+                ),
+              ],
             ),
           ),
-          Material(
-            child: Icon(
-              Icons.send,
-              size: 50,
-              color: Colors.indigo,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
