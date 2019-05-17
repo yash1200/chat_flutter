@@ -1,6 +1,6 @@
+import 'package:chat_app/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: camel_case_types
 class about extends StatefulWidget {
@@ -49,6 +49,19 @@ class _aboutState extends State<about> {
                 ),
               );
             }
+          },
+        ),
+        ListTile(
+          title: Text("Sign Out"),
+          leading: Icon(
+            Icons.exit_to_app,
+            color: Colors.black,
+          ),
+          onTap: (){
+            FirebaseAuth.instance.signOut();
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+              return login();
+            }));
           },
         )
       ],

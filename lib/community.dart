@@ -1,3 +1,4 @@
+import 'package:chat_app/chatUI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,9 +79,16 @@ class _communityState extends State<community> {
             borderRadius: BorderRadius.all(Radius.circular(25.0)),
             clipBehavior: Clip.hardEdge,
           ),
-          trailing: Icon(
-            Icons.message,
-            color: Colors.indigo,
+          trailing: IconButton(
+            icon: Icon(
+              Icons.message,
+              color: Colors.indigo,
+            ),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return chatUI(chatUserId: name);
+              }));
+            },
           ),
         ),
       );

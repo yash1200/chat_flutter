@@ -46,8 +46,7 @@ class _homePageState extends State<homePage> {
                 style: TextStyle(color: Colors.black),
               )),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance,
-                  color: Color.fromARGB(255, 0, 0, 0)),
+              icon: Icon(Icons.people, color: Color.fromARGB(255, 0, 0, 0)),
               title: new Text(
                 'Community',
                 style: TextStyle(color: Colors.black),
