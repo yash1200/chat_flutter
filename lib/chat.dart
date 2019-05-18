@@ -54,78 +54,88 @@ class _chatState extends State<chat> {
 
   Widget buildItem(BuildContext context, document) {
     if (uid == document['id1']) {
-      return Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListTile(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return chatUI(
-                  chatUserId: document['nickname2'],
-                  userId: document['id1'],
-                  customId: document['id2'],
-                  photoUrl: document['photoUrl2']);
-            }));
-          },
-          title: Text(document['nickname2']),
-          subtitle: Text(document['lastmessage']),
-          isThreeLine: true,
-          leading: Material(
-            child: CachedNetworkImage(
-              placeholder: (context, url) => Container(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+      return Column(
+        children: <Widget>[
+          ListTile(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return chatUI(
+                    chatUserId: document['nickname2'],
+                    userId: document['id1'],
+                    customId: document['id2'],
+                    photoUrl: document['photoUrl2']);
+              }));
+            },
+            title: Text(document['nickname2']),
+            subtitle: Text(document['lastmessage']),
+            isThreeLine: true,
+            leading: Material(
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Container(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1.0,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.indigo),
+                      ),
+                      width: 50.0,
+                      height: 50.0,
+                      padding: EdgeInsets.all(15.0),
                     ),
-                    width: 50.0,
-                    height: 50.0,
-                    padding: EdgeInsets.all(15.0),
-                  ),
-              imageUrl: document['photoUrl2'],
-              width: 50.0,
-              height: 50.0,
-              fit: BoxFit.cover,
+                imageUrl: document['photoUrl2'],
+                width: 50.0,
+                height: 50.0,
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              clipBehavior: Clip.hardEdge,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            clipBehavior: Clip.hardEdge,
           ),
-        ),
+          Divider(
+            height: 1,
+          )
+        ],
       );
     } else if (uid == document['id2']) {
-      return Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListTile(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return chatUI(
-                  chatUserId: document['nickname1'],
-                  userId: document['id2'],
-                  customId: document['id1'],
-                  photoUrl: document['photoUrl1']);
-            }));
-          },
-          title: Text(document['nickname1']),
-          isThreeLine: true,
-          subtitle: Text(document['lastmessage']),
-          leading: Material(
-            child: CachedNetworkImage(
-              placeholder: (context, url) => Container(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+      return Column(
+        children: <Widget>[
+          ListTile(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return chatUI(
+                    chatUserId: document['nickname1'],
+                    userId: document['id2'],
+                    customId: document['id1'],
+                    photoUrl: document['photoUrl1']);
+              }));
+            },
+            title: Text(document['nickname1']),
+            isThreeLine: true,
+            subtitle: Text(document['lastmessage']),
+            leading: Material(
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Container(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1.0,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.indigo),
+                      ),
+                      width: 50.0,
+                      height: 50.0,
+                      padding: EdgeInsets.all(15.0),
                     ),
-                    width: 50.0,
-                    height: 50.0,
-                    padding: EdgeInsets.all(15.0),
-                  ),
-              imageUrl: document['photoUrl1'],
-              width: 50.0,
-              height: 50.0,
-              fit: BoxFit.cover,
+                imageUrl: document['photoUrl1'],
+                width: 50.0,
+                height: 50.0,
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              clipBehavior: Clip.hardEdge,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            clipBehavior: Clip.hardEdge,
           ),
-        ),
+          Divider(
+            height: 1,
+          )
+        ],
       );
     } else {
       return Container();
