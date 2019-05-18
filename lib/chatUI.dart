@@ -4,36 +4,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: camel_case_types
 class chatUI extends StatefulWidget {
-  String chatUserId, userId, customId;
+  String chatUserId, userId, customId,photoUrl;
 
   chatUI(
       {Key key,
       @required this.chatUserId,
       @required this.userId,
-      @required this.customId})
+      @required this.customId,
+      @required this.photoUrl})
       : super(key: key);
 
   @override
   _chatUIState createState() =>
-      _chatUIState(chatUserId: chatUserId, userId: userId, customId: customId);
+      _chatUIState(chatUserId: chatUserId, userId: userId, customId: customId, photoUrl: photoUrl);
 }
 
 // ignore: camel_case_types
 class _chatUIState extends State<chatUI> {
-  String chatUserId, userId, customId, groupId;
+  String chatUserId, userId, customId, groupId,photoUrl,photoUrl2,username2;
   TextEditingController textEditingController = new TextEditingController();
 
   _chatUIState(
       {Key key,
       @required this.chatUserId,
       @required this.userId,
-      @required this.customId});
+      @required this.customId,
+      @required this.photoUrl});
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     readLocal();
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user){
+      username2=user.displayName;
+      photoUrl2=user.photoUrl;
+    });
   }
 
   readLocal() {
@@ -68,8 +74,55 @@ class _chatUIState extends State<chatUI> {
 
   Widget buildListMessages() {
     return Flexible(
-      child: Container(),
+      child: FutureBuilder(
+        future: Firestore.instance
+            .collection('messages')
+            .document(groupId)
+            .collection(groupId)
+            .orderBy('timestamp', descending: true)
+            .getDocuments(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+              ),
+            );
+          } else {
+            return ListView.builder(
+              reverse: true,
+                padding: EdgeInsets.all(10),
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  return buildMessages(index,snapshot.data.documents[index]);
+                });
+          }
+        },
+      ),
     );
+  }
+
+  buildMessages(int index,DocumentSnapshot document){
+    if(document['idFrom']==userId){
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Text(document['message']),
+          ],
+        ),
+      );
+    }
+    else{
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(document['message'])
+          ],
+        ),
+      );
+    }
   }
 
   Widget typeMessage() {
@@ -113,14 +166,26 @@ class _chatUIState extends State<chatUI> {
   }
 
   void sendMsg(String message) {
-    print(message);
     if (message.trim() != '') {
       textEditingController.clear();
-      Firestore.instance.collection('messages').document(groupId).setData({
+      Firestore.instance
+          .collection('messages')
+          .document(groupId)
+          .collection(groupId)
+          .document(DateTime.now().millisecondsSinceEpoch.toString())
+          .setData({
         'idFrom': userId,
         'idTo': customId,
         'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
         'message': message,
+      });
+      Firestore.instance.collection('messages').document(groupId).setData({
+        'nickname1': chatUserId,
+        'photoUrl1': photoUrl,
+        'id1': customId,
+        'id2': userId,
+        'photoUrl2': photoUrl2,
+        'nickname2': username2,
       });
     }
   }

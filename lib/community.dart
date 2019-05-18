@@ -28,7 +28,10 @@ class _communityState extends State<community> {
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: Firestore.instance.collection('users').getDocuments(),
+        future: Firestore.instance
+            .collection('users')
+            .orderBy('nickname', descending: false)
+            .getDocuments(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -84,9 +87,9 @@ class _communityState extends State<community> {
               Icons.message,
               color: Colors.indigo,
             ),
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context){
-                return chatUI(chatUserId: name,userId: userid,customId: id);
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return chatUI(chatUserId: name, userId: userid, customId: id,photoUrl: document['photoUrl']);
               }));
             },
           ),
