@@ -100,12 +100,13 @@ class _chatUIState extends State<chatUI> {
                     width: 48.0,
                     height: 48.0,
                     child: new IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed: () => () {
-                          print(textEditingController.text);
-                              sendMsg(textEditingController.text);
-                            }),
-                  ),
+                      icon: Icon(Icons.send),
+                      onPressed: () {
+                        print(textEditingController.text);
+                        sendMsg(textEditingController.text);
+                      },
+                    ),
+                  )
                 ],
               ),
             )));
