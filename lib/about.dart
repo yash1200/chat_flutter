@@ -57,9 +57,10 @@ class _aboutState extends State<about> {
             Icons.exit_to_app,
             color: Colors.black,
           ),
-          onTap: (){
+          onTap: () {
             FirebaseAuth.instance.signOut();
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) {
               return login();
             }));
           },

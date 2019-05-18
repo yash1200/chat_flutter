@@ -89,7 +89,11 @@ class _communityState extends State<community> {
             ),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return chatUI(chatUserId: name, userId: userid, customId: id,photoUrl: document['photoUrl']);
+                return chatUI(
+                    chatUserId: name,
+                    userId: userid,
+                    customId: id,
+                    photoUrl: document['photoUrl']);
               }));
             },
           ),

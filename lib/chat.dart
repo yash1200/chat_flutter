@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'chatUI.dart';
+
 // ignore: camel_case_types
 class chat extends StatefulWidget {
   @override
@@ -55,7 +57,18 @@ class _chatState extends State<chat> {
       return Padding(
         padding: const EdgeInsets.all(10),
         child: ListTile(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return chatUI(
+                  chatUserId: document['nickname2'],
+                  userId: document['id1'],
+                  customId: document['id2'],
+                  photoUrl: document['photoUrl2']);
+            }));
+          },
           title: Text(document['nickname2']),
+          subtitle: Text(document['lastmessage']),
+          isThreeLine: true,
           leading: Material(
             child: CachedNetworkImage(
               placeholder: (context, url) => Container(
@@ -81,7 +94,18 @@ class _chatState extends State<chat> {
       return Padding(
         padding: const EdgeInsets.all(10),
         child: ListTile(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return chatUI(
+                  chatUserId: document['nickname1'],
+                  userId: document['id2'],
+                  customId: document['id1'],
+                  photoUrl: document['photoUrl1']);
+            }));
+          },
           title: Text(document['nickname1']),
+          isThreeLine: true,
+          subtitle: Text(document['lastmessage']),
           leading: Material(
             child: CachedNetworkImage(
               placeholder: (context, url) => Container(
@@ -103,8 +127,7 @@ class _chatState extends State<chat> {
           ),
         ),
       );
-    }
-    else{
+    } else {
       return Container();
     }
   }

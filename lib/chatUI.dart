@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: camel_case_types
 class chatUI extends StatefulWidget {
-  String chatUserId, userId, customId,photoUrl;
+  String chatUserId, userId, customId, photoUrl;
 
   chatUI(
       {Key key,
@@ -15,13 +15,16 @@ class chatUI extends StatefulWidget {
       : super(key: key);
 
   @override
-  _chatUIState createState() =>
-      _chatUIState(chatUserId: chatUserId, userId: userId, customId: customId, photoUrl: photoUrl);
+  _chatUIState createState() => _chatUIState(
+      chatUserId: chatUserId,
+      userId: userId,
+      customId: customId,
+      photoUrl: photoUrl);
 }
 
 // ignore: camel_case_types
 class _chatUIState extends State<chatUI> {
-  String chatUserId, userId, customId, groupId,photoUrl,photoUrl2,username2;
+  String chatUserId, userId, customId, groupId, photoUrl, photoUrl2, username2;
   TextEditingController textEditingController = new TextEditingController();
 
   _chatUIState(
@@ -36,9 +39,9 @@ class _chatUIState extends State<chatUI> {
     // TODO: implement initState
     super.initState();
     readLocal();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user){
-      username2=user.displayName;
-      photoUrl2=user.photoUrl;
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      username2 = user.displayName;
+      photoUrl2 = user.photoUrl;
     });
   }
 
@@ -90,11 +93,11 @@ class _chatUIState extends State<chatUI> {
             );
           } else {
             return ListView.builder(
-              reverse: true,
+                reverse: true,
                 padding: EdgeInsets.all(10),
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
-                  return buildMessages(index,snapshot.data.documents[index]);
+                  return buildMessages(index, snapshot.data.documents[index]);
                 });
           }
         },
@@ -102,24 +105,49 @@ class _chatUIState extends State<chatUI> {
     );
   }
 
-  buildMessages(int index,DocumentSnapshot document){
-    if(document['idFrom']==userId){
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Text(document['message']),
-          ],
+  buildMessages(int index, DocumentSnapshot document) {
+    if (document['idFrom'] == userId) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 5),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  document['message'],
+                  style: TextStyle(color: Colors.white),
+                ),
+                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                width: 200.0,
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(8.0)),
+              ),
+            ],
+          ),
         ),
       );
-    }
-    else{
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text(document['message'])
-          ],
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 5),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  document['message'],
+                  style: TextStyle(color: Colors.white),
+                ),
+                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                width: 200.0,
+                decoration: BoxDecoration(
+                    color: Colors.indigo,
+                    borderRadius: BorderRadius.circular(8.0)),
+              )
+            ],
+          ),
         ),
       );
     }
@@ -184,6 +212,7 @@ class _chatUIState extends State<chatUI> {
         'photoUrl1': photoUrl,
         'id1': customId,
         'id2': userId,
+        'lastmessage': message,
         'time': DateTime.now().millisecondsSinceEpoch.toString(),
         'photoUrl2': photoUrl2,
         'nickname2': username2,
