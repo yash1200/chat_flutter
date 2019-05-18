@@ -1,31 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: camel_case_types
 class chatUI extends StatefulWidget {
-  String chatUserId;
+  String chatUserId, userId, customId;
 
-  chatUI({Key key, @required this.chatUserId}) : super(key: key);
+  chatUI(
+      {Key key,
+      @required this.chatUserId,
+      @required this.userId,
+      @required this.customId})
+      : super(key: key);
 
   @override
-  _chatUIState createState() => _chatUIState(chatUserId: chatUserId);
+  _chatUIState createState() =>
+      _chatUIState(chatUserId: chatUserId, userId: userId, customId: customId);
 }
 
 // ignore: camel_case_types
 class _chatUIState extends State<chatUI> {
-  String chatUserId;
+  String chatUserId, userId, customId, groupId;
+  TextEditingController textEditingController = new TextEditingController();
 
-  _chatUIState({Key key, @required this.chatUserId});
-
-  String userName;
+  _chatUIState(
+      {Key key,
+      @required this.chatUserId,
+      @required this.userId,
+      @required this.customId});
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      userName = user.displayName;
-    });
+    readLocal();
+  }
+
+  readLocal() {
+    if (userId.hashCode <= customId.hashCode) {
+      groupId = '$userId-$customId';
+    } else {
+      groupId = '$customId-$userId';
+    }
   }
 
   @override
@@ -34,20 +50,19 @@ class _chatUIState extends State<chatUI> {
       appBar: AppBar(
         title: Text(chatUserId),
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            buildListMessages(),
-            Divider(
-              height: 1,
+      body: new Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.white,
+          child: new Container(
+            child: new Column(
+              children: <Widget>[
+                buildListMessages(),
+                Divider(height: 1.0),
+                typeMessage(),
+              ],
             ),
-            typeMessage()
-          ],
-        ),
-      ),
+          )),
     );
   }
 
@@ -58,37 +73,54 @@ class _chatUIState extends State<chatUI> {
   }
 
   Widget typeMessage() {
-    return Expanded(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          decoration: BoxDecoration(color: Theme.of(context).cardColor),
-          height: 70,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: InputDecoration(
-                        hintText: 'Type a Message...',
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black))),
+    return Container(
+        decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+        child: new IconTheme(
+            data: new IconThemeData(color: Theme.of(context).accentColor),
+            child: new Container(
+              margin: const EdgeInsets.symmetric(horizontal: 2.0),
+              child: new Row(
+                children: <Widget>[
+                  new Container(
+                    width: 48.0,
+                    height: 48.0,
+                    child: new IconButton(
+                        icon: Icon(Icons.image), onPressed: () => () {}),
                   ),
-                ),
-                Material(
-                  child: Icon(
-                    Icons.send,
-                    size: 50,
-                    color: Colors.indigo,
+                  new Flexible(
+                    child: new TextField(
+                      controller: textEditingController,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: new InputDecoration.collapsed(
+                          hintText: "Enter message"),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+                  new Container(
+                    margin: new EdgeInsets.symmetric(horizontal: 2.0),
+                    width: 48.0,
+                    height: 48.0,
+                    child: new IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: () => () {
+                          print(textEditingController.text);
+                              sendMsg(textEditingController.text);
+                            }),
+                  ),
+                ],
+              ),
+            )));
+  }
+
+  void sendMsg(String message) {
+    print(message);
+    if (message.trim() != '') {
+      textEditingController.clear();
+      Firestore.instance.collection('messages').document(groupId).setData({
+        'idFrom': userId,
+        'idTo': customId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+        'message': message,
+      });
+    }
   }
 }
