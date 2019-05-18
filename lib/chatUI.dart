@@ -184,6 +184,7 @@ class _chatUIState extends State<chatUI> {
         'photoUrl1': photoUrl,
         'id1': customId,
         'id2': userId,
+        'time': DateTime.now().millisecondsSinceEpoch.toString(),
         'photoUrl2': photoUrl2,
         'nickname2': username2,
       });

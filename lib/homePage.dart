@@ -4,6 +4,7 @@ import 'package:chat_app/community.dart';
 import 'package:flutter/material.dart';
 
 class homePage extends StatefulWidget {
+
   @override
   _homePageState createState() => _homePageState();
 }
