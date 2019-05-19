@@ -1,7 +1,10 @@
 # chat_app
 
 A new chat Flutter application built using firestore.
+
+
 Build taking the help of an article posted on Medium.
+
 Here's the link:https://medium.com/flutter-community/building-a-chat-app-with-flutter-and-firebase-from-scratch-9eaa7f41782e
 
 Features:
