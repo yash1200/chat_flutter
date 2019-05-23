@@ -17,55 +17,61 @@ class _aboutState extends State<about> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        FutureBuilder(
-          future: getUser(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 1,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              );
-            } else {
-              return UserAccountsDrawerHeader(
-                accountEmail: Text(
-                  snapshot.data.email,
-                ),
-                accountName: Text(
-                  snapshot.data.displayName,
-                  style: TextStyle(fontSize: 20),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  radius: 100,
-                  child: ClipOval(
-                    child: Image.network(
-                      snapshot.data.photoUrl,
-                      fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(color: Color(0xff121212)),
+      child: ListView(
+        children: <Widget>[
+          FutureBuilder(
+            future: getUser(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                );
+              } else {
+                return UserAccountsDrawerHeader(
+                  accountEmail: Text(
+                    snapshot.data.email,
+                  ),
+                  accountName: Text(
+                    snapshot.data.displayName,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  currentAccountPicture: CircleAvatar(
+                    radius: 100,
+                    child: ClipOval(
+                      child: Image.network(
+                        snapshot.data.photoUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-              );
-            }
-          },
-        ),
-        ListTile(
-          title: Text("Sign Out"),
-          leading: Icon(
-            Icons.exit_to_app,
-            color: Colors.black,
+                );
+              }
+            },
           ),
-          onTap: () {
-            FirebaseAuth.instance.signOut();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) {
-              return login();
-            }));
-          },
-        )
-      ],
+          ListTile(
+            title: Text(
+              "Sign Out",
+              style: TextStyle(color: Colors.white),
+            ),
+            leading: Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
+            onTap: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return login();
+              }));
+            },
+          )
+        ],
+      ),
     );
   }
 }

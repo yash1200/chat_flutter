@@ -27,6 +27,7 @@ class _chatState extends State<chat> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(color: Color(0xff121212)),
       child: FutureBuilder(
           future: Firestore.instance
               .collection('messages')
@@ -66,8 +67,14 @@ class _chatState extends State<chat> {
                     photoUrl: document['photoUrl2']);
               }));
             },
-            title: Text(document['nickname2']),
-            subtitle: Text(document['lastmessage']),
+            title: Text(
+              document['nickname2'],
+              style: TextStyle(color: Colors.white),
+            ),
+            subtitle: Text(
+              document['lastmessage'],
+              style: TextStyle(color: Colors.white),
+            ),
             isThreeLine: true,
             leading: Material(
               child: CachedNetworkImage(
@@ -87,11 +94,12 @@ class _chatState extends State<chat> {
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              clipBehavior: Clip.hardEdge,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
             ),
           ),
           Divider(
             height: 1,
+            color: Color(0xffcf6679),
           )
         ],
       );
@@ -108,9 +116,15 @@ class _chatState extends State<chat> {
                     photoUrl: document['photoUrl1']);
               }));
             },
-            title: Text(document['nickname1']),
+            title: Text(
+              document['nickname1'],
+              style: TextStyle(color: Colors.white),
+            ),
             isThreeLine: true,
-            subtitle: Text(document['lastmessage']),
+            subtitle: Text(
+              document['lastmessage'],
+              style: TextStyle(color: Colors.white),
+            ),
             leading: Material(
               child: CachedNetworkImage(
                 placeholder: (context, url) => Container(
@@ -129,11 +143,12 @@ class _chatState extends State<chat> {
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              clipBehavior: Clip.hardEdge,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
             ),
           ),
           Divider(
             height: 1,
+            color: Color(0xffcf6679),
           )
         ],
       );

@@ -27,6 +27,7 @@ class _communityState extends State<community> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(color: Color(0xff121212)),
       child: FutureBuilder(
         future: Firestore.instance
             .collection('users')
@@ -64,13 +65,17 @@ class _communityState extends State<community> {
           Padding(
             padding: const EdgeInsets.only(bottom: 10, top: 10),
             child: ListTile(
-              title: Text("$name"),
+              title: Text(
+                "$name",
+                style: TextStyle(color: Colors.white),
+              ),
               leading: Material(
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Container(
                         child: CircularProgressIndicator(
                           strokeWidth: 1.0,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.indigo),
                         ),
                         width: 50.0,
                         height: 50.0,
@@ -82,12 +87,12 @@ class _communityState extends State<community> {
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                clipBehavior: Clip.hardEdge,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
               ),
               trailing: IconButton(
                 icon: Icon(
                   Icons.message,
-                  color: Colors.indigo,
+                  color: Color(0xffcf6679),
                 ),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -101,7 +106,10 @@ class _communityState extends State<community> {
               ),
             ),
           ),
-          Divider(height: 1,)
+          Divider(
+            height: 1,
+            color: Color(0xffcf6679),
+          )
         ],
       );
     } else {

@@ -34,27 +34,33 @@ class _homePageState extends State<homePage> {
       body: Center(
         child: widgets.elementAt(_cIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _cIndex,
-        fixedColor: Colors.indigo,
-        type: BottomNavigationBarType.shifting,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.message, color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text(
-                'Chats',
-                style: TextStyle(color: Colors.black),
-              )),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.people, color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text(
-                'Community',
-                style: TextStyle(color: Colors.black),
-              )),
-        ],
-        onTap: (index) {
-          _incrementTab(index);
-        },
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Color(0xff121212)
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _cIndex,
+          backgroundColor: Color(0xff121212),
+          fixedColor: Color(0xff121212),
+          type: BottomNavigationBarType.shifting,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.message, color: Color(0xffcf6679)),
+                title: new Text(
+                  'Chats',
+                  style: TextStyle(color: Color(0xffcf6679)),
+                )),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.people, color: Color(0xffcf6679)),
+                title: new Text(
+                  'Community',
+                  style: TextStyle(color: Color(0xffcf6679)),
+                )),
+          ],
+          onTap: (index) {
+            _incrementTab(index);
+          },
+        ),
       ),
     );
   }

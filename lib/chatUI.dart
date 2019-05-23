@@ -60,9 +60,9 @@ class _chatUIState extends State<chatUI> {
         title: Text(chatUserId),
       ),
       body: new Container(
+          decoration: BoxDecoration(color: Color(0xff121212)),
           width: double.infinity,
           height: double.infinity,
-          color: Colors.white,
           child: new Container(
             child: new Column(
               children: <Widget>[
@@ -116,13 +116,17 @@ class _chatUIState extends State<chatUI> {
               Container(
                 child: Text(
                   document['message'],
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black87),
                 ),
                 padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                 width: 200.0,
                 decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(8.0)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                        topRight: Radius.circular(0))),
               ),
             ],
           ),
@@ -143,7 +147,7 @@ class _chatUIState extends State<chatUI> {
                 padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                 width: 200.0,
                 decoration: BoxDecoration(
-                    color: Colors.indigo,
+                    color: Color(0xffcf6679),
                     borderRadius: BorderRadius.circular(8.0)),
               )
             ],
@@ -155,42 +159,47 @@ class _chatUIState extends State<chatUI> {
 
   Widget typeMessage() {
     return Container(
-        decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-        child: new IconTheme(
-            data: new IconThemeData(color: Theme.of(context).accentColor),
-            child: new Container(
-              margin: const EdgeInsets.symmetric(horizontal: 2.0),
-              child: new Row(
-                children: <Widget>[
-                  new Container(
-                    width: 48.0,
-                    height: 48.0,
-                    child: new IconButton(
-                        icon: Icon(Icons.image), onPressed: () => () {}),
-                  ),
-                  new Flexible(
-                    child: new TextField(
-                      controller: textEditingController,
-                      textCapitalization: TextCapitalization.sentences,
-                      decoration: new InputDecoration.collapsed(
-                          hintText: "Enter message"),
-                    ),
-                  ),
-                  new Container(
-                    margin: new EdgeInsets.symmetric(horizontal: 2.0),
-                    width: 48.0,
-                    height: 48.0,
-                    child: new IconButton(
-                      icon: Icon(Icons.send),
-                      onPressed: () {
-                        print(textEditingController.text);
-                        sendMsg(textEditingController.text);
-                      },
-                    ),
-                  )
-                ],
+      decoration: BoxDecoration(color: Colors.black),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4, right: 4),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(5.0)),
+              color: Colors.white),
+          margin: const EdgeInsets.symmetric(horizontal: 2.0),
+          child: new Row(
+            children: <Widget>[
+              new Container(
+                width: 48.0,
+                height: 48.0,
+                child: new IconButton(
+                    icon: Icon(Icons.image), onPressed: () => () {}),
               ),
-            )));
+              new Flexible(
+                child: new TextField(
+                  controller: textEditingController,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration:
+                      new InputDecoration.collapsed(hintText: "Enter message"),
+                ),
+              ),
+              new Container(
+                margin: new EdgeInsets.symmetric(horizontal: 2.0),
+                width: 48.0,
+                height: 48.0,
+                child: new IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+                    print(textEditingController.text);
+                    sendMsg(textEditingController.text);
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void sendMsg(String message) {
