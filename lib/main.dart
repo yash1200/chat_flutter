@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Chat',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color(0xffcf6679),
+        primaryColor: Color(0xff121212),
       ),
       home: login(),
     );

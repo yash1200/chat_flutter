@@ -26,6 +26,7 @@ class chatUI extends StatefulWidget {
 class _chatUIState extends State<chatUI> {
   String chatUserId, userId, customId, groupId, photoUrl, photoUrl2, username2;
   TextEditingController textEditingController = new TextEditingController();
+  int count1 = 0, count2 = 0;
 
   _chatUIState(
       {Key key,
@@ -39,6 +40,8 @@ class _chatUIState extends State<chatUI> {
     // TODO: implement initState
     super.initState();
     readLocal();
+    count1 = 0;
+    count2 = 0;
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
       username2 = user.displayName;
       photoUrl2 = user.photoUrl;
@@ -60,7 +63,7 @@ class _chatUIState extends State<chatUI> {
         title: Text(chatUserId),
       ),
       body: new Container(
-          decoration: BoxDecoration(color: Color(0xff121212)),
+          decoration: BoxDecoration(color: Color(0xff020202)),
           width: double.infinity,
           height: double.infinity,
           child: new Container(
@@ -107,53 +110,122 @@ class _chatUIState extends State<chatUI> {
 
   buildMessages(int index, DocumentSnapshot document) {
     if (document['idFrom'] == userId) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 5),
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                child: Text(
-                  document['message'],
-                  style: TextStyle(color: Colors.black87),
+      if (count1 == 0) {
+        count1=1;
+        count2 = 0;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 2),
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    document['message'],
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                  width: 200.0,
+                  decoration: BoxDecoration(
+                      color: Color(0xffe6ecea),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(0),
+                          topRight: Radius.circular(15))),
                 ),
-                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                width: 200.0,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
-                        topRight: Radius.circular(0))),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        count2 = 0;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 2),
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    document['message'],
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                  width: 200.0,
+                  decoration: BoxDecoration(
+                      color: Color(0xffe6ecea),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
+                          topRight: Radius.circular(15))),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
     } else {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 5),
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: Text(
-                  document['message'],
-                  style: TextStyle(color: Colors.white),
-                ),
-                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                width: 200.0,
-                decoration: BoxDecoration(
-                    color: Color(0xffcf6679),
-                    borderRadius: BorderRadius.circular(8.0)),
-              )
-            ],
+      if (count2 == 0) {
+        count2++;
+        count1 = 0;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 2),
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    document['message'],
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                  width: 200.0,
+                  decoration: BoxDecoration(
+                    color: Color(0xff505e65),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(15)),
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        count2++;
+        count1 = 0;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 2),
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    document['message'],
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                  width: 200.0,
+                  decoration: BoxDecoration(
+                    color: Color(0xff505e65),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(0)),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -165,7 +237,7 @@ class _chatUIState extends State<chatUI> {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(5.0)),
-              color: Colors.white),
+              color: Color(0xffe6ecea)),
           margin: const EdgeInsets.symmetric(horizontal: 2.0),
           child: new Row(
             children: <Widget>[
@@ -179,8 +251,9 @@ class _chatUIState extends State<chatUI> {
                 child: new TextField(
                   controller: textEditingController,
                   textCapitalization: TextCapitalization.sentences,
-                  decoration:
-                      new InputDecoration.collapsed(hintText: "Enter message"),
+                  decoration: new InputDecoration.collapsed(
+                      hintText: "Enter message",
+                      hintStyle: TextStyle(color: Colors.black87)),
                 ),
               ),
               new Container(
