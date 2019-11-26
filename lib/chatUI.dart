@@ -80,14 +80,14 @@ class _chatUIState extends State<chatUI> {
 
   Widget buildListMessages() {
     return Flexible(
-      child: FutureBuilder(
-        future: Firestore.instance
+      child: StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
             .collection('messages')
             .document(groupId)
             .collection(groupId)
             .orderBy('timestamp', descending: true)
-            .getDocuments(),
-        builder: (context, snapshot) {
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
@@ -96,12 +96,13 @@ class _chatUIState extends State<chatUI> {
             );
           } else {
             return ListView.builder(
-                reverse: true,
-                padding: EdgeInsets.all(10),
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  return buildMessages(index, snapshot.data.documents[index]);
-                });
+              reverse: true,
+              padding: EdgeInsets.all(10),
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) {
+                return buildMessages(index, snapshot.data.documents[index]);
+              },
+            );
           }
         },
       ),
@@ -110,122 +111,53 @@ class _chatUIState extends State<chatUI> {
 
   buildMessages(int index, DocumentSnapshot document) {
     if (document['idFrom'] == userId) {
-      if (count1 == 0) {
-        count1=1;
-        count2 = 0;
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 2),
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    document['message'],
-                    style: TextStyle(color: Colors.black87),
-                  ),
-                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                  width: 200.0,
-                  decoration: BoxDecoration(
-                      color: Color(0xffe6ecea),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(0),
-                          topRight: Radius.circular(15))),
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 5),
+        child: Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  document['message'],
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
-              ],
-            ),
+                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                decoration: BoxDecoration(
+                    color: Color(0xff2979ff),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                        topRight: Radius.circular(0))),
+              ),
+            ],
           ),
-        );
-      } else {
-        count2 = 0;
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 2),
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    document['message'],
-                    style: TextStyle(color: Colors.black87),
-                  ),
-                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                  width: 200.0,
-                  decoration: BoxDecoration(
-                      color: Color(0xffe6ecea),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          topRight: Radius.circular(15))),
-                ),
-              ],
-            ),
-          ),
-        );
-      }
+        ),
+      );
     } else {
-      if (count2 == 0) {
-        count2++;
-        count1 = 0;
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 2),
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    document['message'],
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                  width: 200.0,
-                  decoration: BoxDecoration(
-                    color: Color(0xff505e65),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(15)),
-                  ),
-                )
-              ],
-            ),
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 5),
+        child: Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  document['message'],
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                decoration: BoxDecoration(
+                    color: Color(0xffeeeeee),
+                    borderRadius: BorderRadius.circular(8.0)),
+              )
+            ],
           ),
-        );
-      } else {
-        count2++;
-        count1 = 0;
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 2),
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    document['message'],
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                  width: 200.0,
-                  decoration: BoxDecoration(
-                    color: Color(0xff505e65),
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15),
-                        topLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(15),
-                        bottomLeft: Radius.circular(0)),
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      }
+        ),
+      );
     }
   }
 
@@ -236,7 +168,7 @@ class _chatUIState extends State<chatUI> {
         padding: const EdgeInsets.only(left: 4, right: 4),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(5.0)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
               color: Color(0xffe6ecea)),
           margin: const EdgeInsets.symmetric(horizontal: 2.0),
           child: new Row(
@@ -264,7 +196,9 @@ class _chatUIState extends State<chatUI> {
                   icon: Icon(Icons.send),
                   onPressed: () {
                     print(textEditingController.text);
-                    sendMsg(textEditingController.text);
+                    setState(() {
+                      sendMsg(textEditingController.text);
+                    });
                   },
                 ),
               )
